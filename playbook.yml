@@ -1,0 +1,41 @@
+---
+- name: Настроить сервер (кэш + пакеты + пользователи)
+  hosts: all
+  become: yes
+  tasks:
+    - name: update apt
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+    - name: Установить гит
+      ansible.builtin.apt:
+        name: git
+        state: latest
+        update_cache: yes
+      tags: git  
+    - name: install node.js
+      ansible.builtin.apt:
+        name: 
+          - nodejs
+          - npm
+        state: latest
+        update_cache: yes
+      tags: nodejs 
+    - name: Создать пользователя arya
+      ansible.builtin.user:
+        name: arya
+        shell: /bin/bash
+        create_home: yes
+      tags: arya
+    - name: Создать пользователя sansa
+      ansible.builtin.user:
+        name: sansa
+        shell: /bin/bash
+        create_home: yes
+      tags: sansa
+    - name: Создать пользователя tirion
+      ansible.builtin.user:
+        name: tirion
+        shell: /bin/bash
+        create_home: yes
+      tags: tirion
