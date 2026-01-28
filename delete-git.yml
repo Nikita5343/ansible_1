@@ -1,0 +1,14 @@
+---
+- name: delete git
+  hosts: serv
+  become: yes
+  tasks:
+    - name: update apt
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+    
+    - name: install git
+      apt:
+        name: git
+        state: absent
