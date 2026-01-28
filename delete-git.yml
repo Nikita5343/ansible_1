@@ -8,7 +8,7 @@
         update_cache: yes
         cache_valid_time: 3600
     
-    - name: install git
+    - name: delete git
       apt:
         name: git
         state: absent
