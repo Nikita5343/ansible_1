@@ -1,0 +1,42 @@
+---
+- name: hello world + nginx
+  hosts: all
+  become: yes
+  tasks:
+    - name: install nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: latest
+        update_cache: yes
+      tags: install
+    - name: run nginx
+      systemd:
+        name: nginx
+        state: started
+        enabled: yes
+      tags: run
+    - name: copy index.html
+      copy:
+        src: files/index.html
+        dest: /usr/share/nginx/html/index.html
+        owner: www-data
+        group: www-data
+        mode: '0644'
+        backup: yes
+      notify: restart nginx
+      tags: html  
+    - name: copy nginx.conf
+      copy:
+        src: files/nginx.conf
+        dest: /etc/nginx/nginx.conf
+        owner: root
+        group: root
+        mode: '0644'
+        backup: yes
+      notify: restart nginx
+      tags: config
+  handlers:
+    - name: restart nginx
+      systemd:
+        name: nginx
+        state: restarted 
