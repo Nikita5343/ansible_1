@@ -3,7 +3,6 @@
   hosts: all
   become: yes
   vars:
-    nginx_port: 80
     root_dir: /usr/share/nginx/html
   tasks:
     - name: install nginx
@@ -20,7 +19,7 @@
       tags: run
     - name: copy index.html
       ansible.builtin.template:
-        src: files/index.html
+        src: templates/index.html.j2
         dest: "{{root_dir}}/index.html"
         owner: www-data
         group: www-data
