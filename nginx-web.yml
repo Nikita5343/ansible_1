@@ -2,6 +2,9 @@
 - name: hello world + nginx
   hosts: all
   become: yes
+  vars:
+    nginx_port: 80
+    root_dir: /usr/share/nginx/html
   tasks:
     - name: install nginx
       ansible.builtin.apt:
@@ -16,9 +19,9 @@
         enabled: yes
       tags: run
     - name: copy index.html
-      copy:
+      ansible.builtin.template:
         src: files/index.html
-        dest: /usr/share/nginx/html/index.html
+        dest: "{{root_dir}}/index.html"
         owner: www-data
         group: www-data
         mode: '0644'
@@ -26,8 +29,8 @@
       notify: restart nginx
       tags: html  
     - name: copy nginx.conf
-      copy:
-        src: files/nginx.conf
+      ansible.builtin.template:
+        src: files/nginx.conf.j2
         dest: /etc/nginx/nginx.conf
         owner: root
         group: root
