@@ -1,0 +1,58 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: create new users
+      ansible.builtin.user:
+        create_home: yes
+        shell: /bin/bash
+        name: "{{item.name}}"
+        state: present
+        groups: "{{item.groups}}"
+      loop:
+        - {name: jaime, groups: root}
+        - {name: sansa, groups: root}
+        - {name: robert, groups: root}
+    - name: Создать домашние папки ПРИНУДИТЕЛЬНО
+      file:
+        path: "/home/{{ item.name }}"
+        state: directory
+        owner: "{{ item.name }}"
+        group: "{{ item.name }}"
+        mode: '0755'
+      loop:
+        - {name: jaime, groups: root}
+        - {name: sansa, groups: root}
+        - {name: robert, groups: root}
+
+    - name: add config git users
+      ansible.builtin.template:
+        src: gitconfig.j2
+        dest: "/home/{{item.name}}/.gitconfig"
+      loop:
+        - {name: jaime}
+        - {name: sansa}
+        - {name: robert}
+    - name: Создать /etc/aliases если нет  # ← ДОБАВИТЬ!
+      file:
+        path: /etc/aliases
+        state: touch
+        owner: root
+        group: root
+        mode: '0644'
+    - name: add email to users
+      ansible.builtin.lineinfile:
+        path: /etc/aliases
+        line: "{{item}} : {{item}}@test.com"
+      loop:
+        - robert
+        - sansa
+        - jaime
+    - name: add ssh-key for users
+      ansible.posix.authorized_key:
+        user: "{{item}}"
+        key: "{{ lookup('file', 'files/id_ed25519.pub') }}"
+      loop:
+        - sansa
+        - robert
+        - jaime
