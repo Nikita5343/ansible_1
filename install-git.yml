@@ -2,6 +2,7 @@
 - name: install git
   hosts: serv
   become: yes
+  gather_facts: no
   tasks:
     - name: update apt
       apt:
