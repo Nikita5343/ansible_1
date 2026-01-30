@@ -10,3 +10,5 @@ install-nodejs:
 	ansible-playbook playbook.yml -i inventory.ini -t nodejs
 ng-web:
 	ansible-playbook nginx-web.yml -i inventory.ini
+connect:
+	ssh ubuntu@89.169.186.131
