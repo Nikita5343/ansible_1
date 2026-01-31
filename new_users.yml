@@ -1,0 +1,46 @@
+---
+- hosts: all
+  gather_facts: no
+  
+  vars:
+    create_users: false  # Меняй на true/false
+  
+  tasks:
+    - name: Install Python deps для CentOS 7
+      raw: yum install -y python2 python-simplejson
+      become: yes
+
+    - name: Create test user
+      raw: useradd -m -s /bin/bash test || true
+      become: yes
+      when: create_users | bool
+      register: user_created
+
+    - name: Check test user  
+      raw: id test || echo "User NOT exists"
+      become: yes
+      register: user_check
+      ignore_errors: yes
+
+    - name: Show when result
+      debug:
+        msg: |
+          create_users={{ create_users }}
+          User task: {{ 'skipped' if user_created is skipped else 'executed' }}
+          User exists: {{ 'NO' if 'User NOT exists' in user_check.stdout else 'YES' }}
+
+    - name: Alternative task (когда НЕ создавать)
+      raw: echo "✅ When работает! Пользователи НЕ создаются!"
+      become: yes
+      when: not create_users | bool
+    
+    - name: install git
+      raw: yum install -y git
+      become: yes
+
+
+
+
+    
+
+# ❌ УДАЛИ ЭТО! Нет второго ---
