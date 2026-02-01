@@ -1,0 +1,25 @@
+---
+- hosts: all
+  gather_facts: yes
+  vars:
+    server_message: "This is server {{ inventory_hostname }}!"
+    numbers: [1,2,3,4,23,5]
+  tasks:
+    - name : min numbers
+      debug:
+        msg: "{{numbers | max}}"
+      tags: min
+
+    - name: create web directory
+      file:
+        path: /var/www/html
+        state: directory
+        mode: '0755'
+      become: yes
+
+    - name: create index.html
+      template:
+        src: index.html.j2
+        dest: /var/www/html/index.html
+        mode: '0644'
+      become: yes
