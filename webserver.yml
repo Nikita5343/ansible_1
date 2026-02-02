@@ -9,7 +9,11 @@
       debug:
         msg: "{{numbers | max}}"
       tags: min
-
+    - name: restart nginx
+      service:
+        name: nginx
+        state: restarted
+      become: yes
     - name: create web directory
       file:
         path: /var/www/html
