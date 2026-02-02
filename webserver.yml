@@ -20,7 +20,14 @@
         state: directory
         mode: '0755'
       become: yes
-
+    - name: install cowsay
+      ansible.builtin.apt:
+        name: cowsay
+        state: latest
+      become: yes
+    - name: run cowsay with server name
+      shell: cowsay "This is server{{inventory_hostname}}"
+      register: cowsay_result
     - name: create index.html
       template:
         src: index.html.j2
