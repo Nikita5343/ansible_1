@@ -1,0 +1,7 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for git
+- name: install git
+  ansible.builtin.apt:
+    name: git
+    state: latest
