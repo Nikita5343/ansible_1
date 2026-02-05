@@ -1,0 +1,22 @@
+---
+- hosts: all
+  become: yes
+  vars:
+    users:
+      - name: nikita1
+        password: "1234"
+      - name: nikita2
+        password: "1234"
+  roles:
+    - nodejs
+    - git
+    - user
+  tags: install_all
+  # tasks:
+  #   - name: add ssh-key
+  #     ansible.posix.authorized_key:
+  #       user: "{{ username}}"
+  #       key: "{{ lookup('file', 'roles/user/files/authorized_keys') }}"
+  #       state: present
+  #     loop: 
+  #       - nikita1
