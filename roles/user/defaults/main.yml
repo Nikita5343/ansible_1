@@ -1,4 +1,12 @@
 #SPDX-License-Identifier: MIT-0
 ---
 # defaults file for user
-username: nikita1
+users: 
+  - name: nikita1
+    password: "1234"
+    groups: sudo
+  - name: nikita2  
+    password: "1234"
+    groups: sudo
+  - name: nikita3
+    password: "1234"
